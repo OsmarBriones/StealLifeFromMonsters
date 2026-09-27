@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.1.0] - 2026-09-27
 - Changed `DrainFixedAmount` default value to 25 and expanded allowed range to 0 - 500 HP.
 - Added lower bound of 0 to `MaxHealthCap` (0 - 1000) to prevent negative health configurations.
 - Expanded `TickIntervalSeconds` maximum range up to 10.0 seconds.

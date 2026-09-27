@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
@@ -12,7 +12,7 @@ namespace StealLifeFromMonsters
 		// y StealLifeFromMonsters por el nombre del proyecto (sourceName).
 		public const string PluginGuid = "com.osmar.StealLifeFromMonsters";
 		public const string PluginName = "StealLifeFromMonsters";
-		public const string PluginVersion = "1.0.0";
+		public const string PluginVersion = "1.1.0";
 
 		internal Harmony? Harmony { get; set; }
 		internal static new BepInEx.Logging.ManualLogSource Logger { get; private set; } = null!;
