@@ -36,8 +36,6 @@ All settings are controlled through the generated file: `com.osmar.StealLifeFrom
 | `EnableAudioVisualFeedback` | `true` | Plays native heal sound and screen pulse effects while draining. |
 
 ## Issues & Bug Reports
-Please do **not** contact the developer directly or personally for bug reports or feature requests.
-
 The official way to report issues, suggest improvements, or submit feedback is by opening an issue on the official GitHub repository:
 👉 [GitHub Issues](https://github.com/OsmarBriones/StealLifeFromMonsters/issues)
 
