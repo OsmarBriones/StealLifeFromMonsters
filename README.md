@@ -1,24 +1,17 @@
 # StealLifeFromMonsters
 
-[Short 1-2 sentence description of what the mod brings to the player's game. Example: "Adds customizable duck spawns across the facility to bring joy and chaos to your salvage runs."]
+Grab monsters and drain their health to heal yourself, using the player health transfer cadence. Fully configurable. Only Host, clients don't need it.
 
-Only the host needs to have this mod installed â€” other players see the effects automatically without installing anything.
+Only the host needs to have this mod installed — other players see the effects automatically without installing anything.
 
 ## Features
 
-<!--
-  PLAYER-FACING FEATURES GUIDELINE:
-  This section is for players on Thunderstore and mod managers.
-  - Describe gameplay mechanics, effects, audiovisual feedback, and player experience.
-  - Highlight multiplayer behavior in plain language (e.g., host-only installation).
-  - DO NOT include Unity engine terms, hook/patch target names (e.g., EnemyDirector, TruckSafetySpawnPoint),
-    Harmony methods, or internal code architecture here (put those in ARCHITECTURE.md).
--->
-
-- **Exciting Gameplay Mechanic**: Explain what players experience in-game.
-- **Dynamic Facility Effects**: Describe the in-game behavior and balance.
-- **Host-Only Multiplayer**: Only the host needs the mod installed; effects are fully synchronized for all players in the lobby.
-- **Customizable Experience**: Adjust settings via the configuration file to tune the mod to your liking.
+- **Monster Life Drain**: Grab any active monster and hold the grab interaction to drain its life force directly into your own health pool.
+- **Natural Transfer Cadence**: Uses the exact rhythm and timing of the player-to-player health transfer mechanic (1-second pulses).
+- **Overheal Protection**: Drain automatically stops when you reach maximum health (100 HP) so you never waste monster health, with optional overheal toggle in configuration.
+- **Native Audiovisual Feedback**: Triggers full visual screen pulse and audio heartbeat cues on every healing tick.
+- **Host-Only Multiplayer**: Only the host needs to install the mod. Health changes and damage synchronize across all connected players automatically.
+- **Fully Configurable**: Switch between percentage-based or fixed HP drain, adjust tick rates, and customize health caps.
 
 ## Requirements
 - [BepInEx Pack for R.E.P.O.](https://thunderstore.io/c/repo/p/BepInEx/BepInExPack/)
@@ -26,18 +19,27 @@ Only the host needs to have this mod installed â€” other players see the ef
 ## Installation
 1. Install the latest [BepInEx Pack](https://thunderstore.io/c/repo/p/BepInEx/BepInExPack/).
 2. Place `StealLifeFromMonsters.dll` into your `BepInEx/plugins` folder (or install via r2modman / Thunderstore Mod Manager).
-3. Launch the game once â€” the configuration file will be generated automatically inside `BepInEx/config`.
+3. Launch the game once — the configuration file will be generated automatically inside `BepInEx/config`.
 
 ## Configuration
 All settings are controlled through the generated file: `com.osmar.StealLifeFromMonsters.cfg` located in `BepInEx/config`.
 
-- `ExampleSetting` (default `3`): Describe the gameplay effect of this option in plain words.
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `Enabled` | `true` | Enable or disable the mod. |
+| `DrainMode` | `Percentage` | Calculation mode: `Percentage` (scales with monster health) or `Fixed` (flat HP). |
+| `DrainPercentage` | `10.0` | Percentage of monster's max health to drain per tick (1 - 100%). |
+| `DrainFixedAmount` | `10` | Flat HP drained per tick when using `Fixed` mode (1 - 100). |
+| `TickIntervalSeconds` | `1.0` | Seconds between each drain tick (0.2 - 5.0 seconds). |
+| `AllowOverheal` | `false` | When true, allows draining past normal max health up to `MaxHealthCap`. |
+| `MaxHealthCap` | `100` | Maximum health allowed when draining. |
+| `EnableAudioVisualFeedback` | `true` | Plays native heal sound and screen pulse effects while draining. |
 
 ## Issues & Bug Reports
 Please do **not** contact the developer directly or personally for bug reports or feature requests.
 
 The official way to report issues, suggest improvements, or submit feedback is by opening an issue on the official GitHub repository:
-ðŸ‘‰ [GitHub Issues](https://github.com/OsmarBriones/StealLifeFromMonsters/issues)
+👉 [GitHub Issues](https://github.com/OsmarBriones/StealLifeFromMonsters/issues)
 
 ## Credits
 Developed by **Osmar Briones**
