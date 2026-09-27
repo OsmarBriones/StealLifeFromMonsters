@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -126,6 +127,63 @@ namespace StealLifeFromMonsters.Drain
 			if (showEffect)
 			{
 				player.HealedOther();
+			}
+
+			// Full Health Money Conversion
+			if (ConfigurationController.EnableFullHealthMoneyConversion.Value)
+			{
+				int drainToConvert = 0;
+				if (player.playerHealth.health >= player.playerHealth.maxHealth)
+				{
+					// Player was already at full health: all damage dealt converts to money
+					drainToConvert = drainAmount;
+				}
+				else if (player.playerHealth.health + healAmount >= player.playerHealth.maxHealth)
+				{
+					// Player reached full health during this tick: excess drain converts to money
+					drainToConvert = drainAmount - healAmount;
+				}
+
+				if (drainToConvert > 0)
+				{
+					int multiplier = Mathf.Clamp(ConfigurationController.FullHealthMoneyMultiplier.Value, 0, 300);
+					long potentialMoney = (long)drainToConvert * multiplier;
+
+					if (potentialMoney > 0)
+					{
+						int currentCurrency = SemiFunc.StatGetRunCurrency();
+						int currentTotalHaul = SemiFunc.StatGetRunTotalHaul();
+						int maxCap = ConfigurationController.MaxCurrencyCap.Value;
+
+						long maxAllowed = Math.Min((long)maxCap, (long)int.MaxValue);
+						long safeRoom = Math.Max(0L, maxAllowed - currentCurrency);
+						int moneyToAdd = (int)Math.Min(potentialMoney, safeRoom);
+
+						if (moneyToAdd > 0)
+						{
+							int newCurrency = currentCurrency + moneyToAdd;
+							SemiFunc.StatSetRunCurrency(newCurrency);
+
+							long roomTotalHaul = Math.Max(0L, (long)int.MaxValue - currentTotalHaul);
+							int totalHaulToAdd = (int)Math.Min((long)moneyToAdd, roomTotalHaul);
+							SemiFunc.StatSetRunTotalHaul(currentTotalHaul + totalHaulToAdd);
+
+							if (CurrencyUI.instance != null)
+							{
+								CurrencyUI.instance.FetchCurrency();
+							}
+
+							if (ShopIncreaseUI.instance != null)
+							{
+								ShopIncreaseUI.instance.ShowIncrease(moneyToAdd, 3f);
+							}
+
+							StealLifeFromMonstersPlugin.Logger.LogDebug(
+								$"Converted {drainToConvert} drain into {moneyToAdd} currency for {player.playerName} (Current: {newCurrency}, Mult: {multiplier}x)."
+							);
+						}
+					}
+				}
 			}
 
 			StealLifeFromMonstersPlugin.Logger.LogDebug(

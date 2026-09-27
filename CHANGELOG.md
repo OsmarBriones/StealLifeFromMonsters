@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+- Added optional full health money conversion mechanic (`EnableFullHealthMoneyConversion`, default `false`) allowing players at 100% HP to convert excess stolen monster health into immediate run currency.
+- Added `FullHealthMoneyMultiplier` (default `10`, range 0 - 300) to scale currency earned per stolen HP.
+- Added `MaxCurrencyCap` (default `999999`) and integer overflow safety checks to prevent breaking run currency or exceeding game limits.
+
 ## [1.1.0] - 2026-09-27
 - Changed `DrainFixedAmount` default value to 25 and expanded allowed range to 0 - 500 HP.
 - Added lower bound of 0 to `MaxHealthCap` (0 - 1000) to prevent negative health configurations.

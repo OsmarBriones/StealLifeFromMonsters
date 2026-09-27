@@ -27,6 +27,7 @@ This document describes the runtime structure, data flow, and design decisions f
   - Computes absorbable heal amount (`Mathf.Min(drainAmount, missingPlayerHealth)`).
   - If `healAmount > 0`, calls `player.playerHealth.HealOther(healAmount, effect: true)`.
   - Always triggers `player.HealedOther()` if feedback is enabled, providing audio/visual cues even if player is at max health.
+  - If `EnableFullHealthMoneyConversion` is enabled and player is at 100% health (or reaches 100% HP during the tick), converts excess unconverted drain into run currency (`SemiFunc.StatSetRunCurrency`), safely clamped against `MaxCurrencyCap` and `int.MaxValue`, and updates `ShopIncreaseUI` / `CurrencyUI`.
 
 ### 2. Level Lifecycle & Cleanup
 - **Hook:** `Patches/RoundDirector_StartRoundLogic_Patch.cs` (`HarmonyPostfix` on `RoundDirector.StartRoundLogic`).

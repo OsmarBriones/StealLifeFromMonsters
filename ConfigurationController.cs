@@ -16,6 +16,9 @@ namespace StealLifeFromMonsters
 		internal static ConfigEntry<int> MaxHealthCap { get; private set; } = null!;
 		internal static ConfigEntry<bool> AllowDrainWhileStunned { get; private set; } = null!;
 		internal static ConfigEntry<bool> EnableAudioVisualFeedback { get; private set; } = null!;
+		internal static ConfigEntry<bool> EnableFullHealthMoneyConversion { get; private set; } = null!;
+		internal static ConfigEntry<int> FullHealthMoneyMultiplier { get; private set; } = null!;
+		internal static ConfigEntry<int> MaxCurrencyCap { get; private set; } = null!;
 
 		internal static void Initialize(ConfigFile config)
 		{
@@ -94,6 +97,33 @@ namespace StealLifeFromMonsters
 				nameof(EnableAudioVisualFeedback),
 				true,
 				"Enable or disable native heal audio and screen pulse effects when draining health."
+			);
+
+			EnableFullHealthMoneyConversion = configFile.Bind(
+				"Economy",
+				nameof(EnableFullHealthMoneyConversion),
+				false,
+				"If true, damage dealt to monsters while the player is at 100% health is converted into run currency immediately."
+			);
+
+			FullHealthMoneyMultiplier = configFile.Bind(
+				"Economy",
+				nameof(FullHealthMoneyMultiplier),
+				10,
+				new ConfigDescription(
+					"Multiplier applied to drained monster health to calculate currency gained at full health (e.g. 10 means 10x drained HP).",
+					new AcceptableValueRange<int>(0, 300)
+				)
+			);
+
+			MaxCurrencyCap = configFile.Bind(
+				"Economy",
+				nameof(MaxCurrencyCap),
+				999999,
+				new ConfigDescription(
+					"Maximum total run currency limit allowed to prevent integer overflow or breaking game economy.",
+					new AcceptableValueRange<int>(0, 2000000000)
+				)
 			);
 
 			configFile.Save();
