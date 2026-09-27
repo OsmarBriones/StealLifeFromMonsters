@@ -367,3 +367,4 @@ ts_build/
 Thunderstore/
 dist/
 *.zip
+thunderstore.toml
