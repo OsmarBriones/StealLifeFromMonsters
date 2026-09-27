@@ -3,6 +3,9 @@ name: Publish to Thunderstore
 on:
   release:
     types: [published]
+  push:
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 permissions:
@@ -23,8 +26,14 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Path dist -Force | Out-Null
-          $tag = if ($env:GITHUB_REF_NAME) { $env:GITHUB_REF_NAME } else { "${{ github.event.release.tag_name }}" }
-          Write-Host "Downloading release package for tag: $tag..."
+          $tag = if ('${{ github.event.release.tag_name }}') {
+            '${{ github.event.release.tag_name }}'
+          } elseif ($env:GITHUB_REF_TYPE -eq 'tag') {
+            $env:GITHUB_REF_NAME
+          } else {
+            (gh release list --limit 1 --json tagName --jq '.[0].tagName')
+          }
+          Write-Host "Resolved release tag: $tag"
           gh release download $tag --dir dist --pattern "*.zip"
           $zip = Get-ChildItem -Path dist/*.zip | Select-Object -First 1
           if (-not $zip) {
