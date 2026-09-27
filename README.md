@@ -29,10 +29,11 @@ All settings are controlled through the generated file: `com.osmar.StealLifeFrom
 | `Enabled` | `true` | Enable or disable the mod. |
 | `DrainMode` | `Percentage` | Calculation mode: `Percentage` (scales with monster health) or `Fixed` (flat HP). |
 | `DrainPercentage` | `10.0` | Percentage of monster's max health to drain per tick (1 - 100%). |
-| `DrainFixedAmount` | `10` | Flat HP drained per tick when using `Fixed` mode (1 - 100). |
-| `TickIntervalSeconds` | `1.0` | Seconds between each drain tick (0.2 - 5.0 seconds). |
+| `DrainFixedAmount` | `25` | Flat HP drained per tick when using `Fixed` mode (0 - 500). |
+| `TickIntervalSeconds` | `1.0` | Seconds between each drain tick (0.2 - 10.0 seconds). |
 | `AllowOverheal` | `false` | When true, allows draining past normal max health up to `MaxHealthCap`. |
-| `MaxHealthCap` | `100` | Maximum health allowed when draining. |
+| `MaxHealthCap` | `100` | Maximum health allowed when draining (0 - 1000). |
+| `AllowDrainWhileStunned` | `false` | When true, allows health drain to continue while stunned or tumbling if grabbing the monster. |
 | `EnableAudioVisualFeedback` | `true` | Plays native heal sound and screen pulse effects while draining. |
 
 ## Issues & Bug Reports

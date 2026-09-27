@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+- Changed `DrainFixedAmount` default value to 25 and expanded allowed range to 0 - 500 HP.
+- Added lower bound of 0 to `MaxHealthCap` (0 - 1000) to prevent negative health configurations.
+- Expanded `TickIntervalSeconds` maximum range up to 10.0 seconds.
+- Added `AllowDrainWhileStunned` configuration option (default `false`) allowing health drain to continue while stunned or tumbling if grabbing the monster.
+- Simplified `## Issues & Bug Reports` section in documentation.
+
 ## [1.0.0] - 2026-09-27
 - Initial release!
 - Grab monsters to drain health directly into your player health pool at natural transfer cadence (1.0s ticks).

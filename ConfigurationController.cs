@@ -14,6 +14,7 @@ namespace StealLifeFromMonsters
 		internal static ConfigEntry<float> TickIntervalSeconds { get; private set; } = null!;
 		internal static ConfigEntry<bool> AllowOverheal { get; private set; } = null!;
 		internal static ConfigEntry<int> MaxHealthCap { get; private set; } = null!;
+		internal static ConfigEntry<bool> AllowDrainWhileStunned { get; private set; } = null!;
 		internal static ConfigEntry<bool> EnableAudioVisualFeedback { get; private set; } = null!;
 
 		internal static void Initialize(ConfigFile config)
@@ -47,10 +48,10 @@ namespace StealLifeFromMonsters
 			DrainFixedAmount = configFile.Bind(
 				"Mechanics",
 				nameof(DrainFixedAmount),
-				10,
+				25,
 				new ConfigDescription(
 					"Fixed amount of HP to drain per tick (when DrainMode is Fixed).",
-					new AcceptableValueRange<int>(1, 100)
+					new AcceptableValueRange<int>(0, 500)
 				)
 			);
 
@@ -60,7 +61,7 @@ namespace StealLifeFromMonsters
 				1.0f,
 				new ConfigDescription(
 					"Seconds between each health drain tick (matches native player transfer interval by default).",
-					new AcceptableValueRange<float>(0.2f, 5.0f)
+					new AcceptableValueRange<float>(0.2f, 10.0f)
 				)
 			);
 
@@ -75,7 +76,17 @@ namespace StealLifeFromMonsters
 				"Mechanics",
 				nameof(MaxHealthCap),
 				100,
-				"Maximum health cap allowed for life drain."
+				new ConfigDescription(
+					"Maximum health cap allowed for life drain.",
+					new AcceptableValueRange<int>(0, 1000)
+				)
+			);
+
+			AllowDrainWhileStunned = configFile.Bind(
+				"Mechanics",
+				nameof(AllowDrainWhileStunned),
+				false,
+				"If true, allows health drain to continue even if the player is stunned or tumbling, as long as they are still holding the monster."
 			);
 
 			EnableAudioVisualFeedback = configFile.Bind(

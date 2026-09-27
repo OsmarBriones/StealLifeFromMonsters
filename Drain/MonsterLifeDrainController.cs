@@ -48,7 +48,12 @@ namespace StealLifeFromMonsters.Drain
 				}
 
 				PlayerAvatar player = grabber.playerAvatar;
-				if (player == null || player.isDisabled || player.isTumbling || player.playerHealth == null)
+				if (player == null || player.isDisabled || player.playerHealth == null)
+				{
+					continue;
+				}
+
+				if (!ConfigurationController.AllowDrainWhileStunned.Value && player.isTumbling)
 				{
 					continue;
 				}
@@ -93,7 +98,7 @@ namespace StealLifeFromMonsters.Drain
 			}
 			else
 			{
-				drainAmount = Mathf.Max(1, ConfigurationController.DrainFixedAmount.Value);
+				drainAmount = Mathf.Max(0, ConfigurationController.DrainFixedAmount.Value);
 			}
 
 			// Do not drain more than monster has
