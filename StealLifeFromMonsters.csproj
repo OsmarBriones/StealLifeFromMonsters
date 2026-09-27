@@ -84,13 +84,13 @@
   <!-- PostBuild: deploy to Steam and r2modman Debug profile -->
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <!-- Steam plugins directory -->
-    <Exec Command="set DEST=&quot;$(RepoRootPath)\BepInEx\plugins&quot;&#xD;&#xA;if not exist %25DEST%25 mkdir %25DEST%25&#xD;&#xA;xcopy /Y /R /I &quot;$(TargetPath)&quot; %25DEST%25\" />
+    <Exec ContinueOnError="true" Command="set DEST=&quot;$(RepoRootPath)\BepInEx\plugins&quot;&#xD;&#xA;if not exist %25DEST%25 mkdir %25DEST%25&#xD;&#xA;xcopy /Y /R /I &quot;$(TargetPath)&quot; %25DEST%25\" />
 
     <!-- r2modman Debug profile (if present) -->
     <PropertyGroup>
       <R2ModmanDebugPlugins>$(APPDATA)\r2modmanPlus-local\REPO\profiles\Debug\BepInEx\plugins</R2ModmanDebugPlugins>
     </PropertyGroup>
-    <Exec Command="if exist &quot;$(APPDATA)\r2modmanPlus-local\REPO\profiles\Debug&quot; (&#xD;&#xA;  if not exist &quot;$(R2ModmanDebugPlugins)&quot; mkdir &quot;$(R2ModmanDebugPlugins)&quot;&#xD;&#xA;  xcopy /Y /R /I &quot;$(TargetPath)&quot; &quot;$(R2ModmanDebugPlugins)\&quot;&#xD;&#xA;)" />
+    <Exec ContinueOnError="true" Command="if exist &quot;$(APPDATA)\r2modmanPlus-local\REPO\profiles\Debug&quot; (&#xD;&#xA;  if not exist &quot;$(R2ModmanDebugPlugins)&quot; mkdir &quot;$(R2ModmanDebugPlugins)&quot;&#xD;&#xA;  xcopy /Y /R /I &quot;$(TargetPath)&quot; &quot;$(R2ModmanDebugPlugins)\&quot;&#xD;&#xA;)" />
   </Target>
 
   <!-- Package everything into a Thunderstore-ready ZIP -->
