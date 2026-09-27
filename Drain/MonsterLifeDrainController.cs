@@ -57,11 +57,6 @@ namespace StealLifeFromMonsters.Drain
 					? ConfigurationController.MaxHealthCap.Value
 					: player.playerHealth.maxHealth;
 
-				if (player.playerHealth.health >= maxAllowedHealth)
-				{
-					continue;
-				}
-
 				long interactionKey = ((long)enemy.GetInstanceID() << 32) ^ (long)player.GetInstanceID();
 
 				if (!drainTimers.TryGetValue(interactionKey, out float currentTimer))
@@ -103,30 +98,33 @@ namespace StealLifeFromMonsters.Drain
 
 			// Do not drain more than monster has
 			drainAmount = Mathf.Min(drainAmount, enemy.Health.healthCurrent);
-
-			// Do not heal beyond allowed cap
-			int missingPlayerHealth = maxAllowedHealth - player.playerHealth.health;
-			drainAmount = Mathf.Min(drainAmount, missingPlayerHealth);
-
 			if (drainAmount <= 0)
 			{
 				return;
 			}
 
-			// Apply damage to enemy (replicates via HurtRPC)
+			// Apply full damage to enemy (replicates via HurtRPC)
 			enemy.Health.Hurt(drainAmount, Vector3.zero);
+
+			// Calculate how much the player can absorb without exceeding allowed cap
+			int missingPlayerHealth = Mathf.Max(0, maxAllowedHealth - player.playerHealth.health);
+			int healAmount = Mathf.Min(drainAmount, missingPlayerHealth);
 
 			// Apply heal to player (replicates via UpdateHealthRPC)
 			bool showEffect = ConfigurationController.EnableAudioVisualFeedback.Value;
-			player.playerHealth.HealOther(drainAmount, effect: showEffect);
+			if (healAmount > 0)
+			{
+				player.playerHealth.HealOther(healAmount, effect: showEffect);
+			}
 
+			// Play drain feedback beam/pulse even if player health was already full
 			if (showEffect)
 			{
 				player.HealedOther();
 			}
 
 			StealLifeFromMonstersPlugin.Logger.LogDebug(
-				$"Drained {drainAmount} HP from {enemy.EnemyParent?.enemyName ?? "Monster"} to {player.playerName}."
+				$"Drained {drainAmount} HP from {enemy.EnemyParent?.enemyName ?? "Monster"} to {player.playerName} (absorbed {healAmount} HP)."
 			);
 		}
 

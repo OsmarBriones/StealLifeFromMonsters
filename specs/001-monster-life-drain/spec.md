@@ -26,18 +26,18 @@ As an injured player, I want to grab a monster and hold the grab interaction to 
 
 ---
 
-### User Story 2 - Health Capping and Overheal Prevention (Priority: P2)
+### User Story 2 - Health Capping, Overheal Prevention and Full-Health Siphon (Priority: P2)
 
-As a player at full health, I want the life drain to stop transferring when I reach maximum health (100 HP), so that monster life is not consumed unnecessarily without benefit.
+As a player at full health, I want to be able to continue grabbing and draining monsters to deal damage to them without gaining excess health, while ensuring my own health does not exceed maximum health (100 HP) unless overheal is explicitly enabled.
 
-**Why this priority**: Prevents waste of monster health, infinite drain exploits, and respects the vanilla maximum health boundary.
+**Why this priority**: Allows offensive siphon utility against monsters even when at full HP, while respecting the vanilla maximum health boundary.
 
-**Independent Test**: Grab a monster when player HP is 100 or when player reaches 100 during drain, and verify no further health is drained.
+**Independent Test**: Grab a monster when player HP is 100 or when player reaches 100 during drain, and verify monster continues losing full tick health while player HP remains at 100.
 
 **Acceptance Scenarios**:
 
-1. **Given** a player at 100 HP, **When** the player grabs a monster, **Then** no health drain or transfer occurs.
-2. **Given** a player at 95 HP draining 10 HP, **When** the transfer tick occurs, **Then** the player health is clamped at 100 HP.
+1. **Given** a player at 100 HP, **When** the player grabs and holds a monster, **Then** the monster takes full tick damage (e.g., 20 HP on Bella) and audiovisual feedback plays, while player HP stays capped at 100 HP.
+2. **Given** a player at 95 HP draining 10 HP from a monster, **When** the transfer tick occurs, **Then** the monster takes the full 10 HP damage and the player health is clamped at 100 HP (+5 HP absorbed).
 
 ---
 

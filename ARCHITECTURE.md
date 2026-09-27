@@ -22,9 +22,11 @@ This document describes the runtime structure, data flow, and design decisions f
 - **Timing:** `MonsterLifeDrainController` tracks elapsed hold time per `(enemyId, playerId)` pair.
 - **Drain Execution:** When `currentTimer >= ConfigurationController.TickIntervalSeconds.Value`:
   - Computes drain amount (`Percentage` vs `Fixed`).
-  - Clamps amount to monster's remaining health and player's missing health to the cap.
-  - Calls `enemy.Health.Hurt(drainAmount, Vector3.zero)` to damage monster across network.
-  - Calls `player.playerHealth.HealOther(drainAmount, effect: true)` and `player.HealedOther()` to heal player and play native feedback.
+  - Clamps amount to monster's remaining health (`healthCurrent`).
+  - Calls `enemy.Health.Hurt(drainAmount, Vector3.zero)` to damage monster across network with full tick damage.
+  - Computes absorbable heal amount (`Mathf.Min(drainAmount, missingPlayerHealth)`).
+  - If `healAmount > 0`, calls `player.playerHealth.HealOther(healAmount, effect: true)`.
+  - Always triggers `player.HealedOther()` if feedback is enabled, providing audio/visual cues even if player is at max health.
 
 ### 2. Level Lifecycle & Cleanup
 - **Hook:** `Patches/RoundDirector_StartRoundLogic_Patch.cs` (`HarmonyPostfix` on `RoundDirector.StartRoundLogic`).
@@ -51,5 +53,5 @@ StealLifeFromMonsters/
 ## Key Design Decisions & Invariants
 
 - **Host-Only Compatibility:** Because all health changes use standard vanilla RPC methods, connected clients run pure vanilla code and receive full health synchronization and visual feedback automatically.
-- **Safe Overheal Protection:** Life drain is strictly clamped to the player's maximum health (`playerHealth.maxHealth`) by default to prevent wasting monster life and infinite drain exploits.
+- **Safe Overheal Protection & Siphon:** Player healing is strictly clamped to the maximum health (`playerHealth.maxHealth`) by default, while allowing continued monster damage and siphon feedback when the player is at full health.
 - **Zero Allocations:** Grab timer tracking uses a compact `Dictionary<long, float>` indexed by combined instance IDs with periodic garbage-free pruning.

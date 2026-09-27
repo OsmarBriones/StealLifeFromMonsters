@@ -8,7 +8,7 @@ Only the host needs to have this mod installed — other players see the effects
 
 - **Monster Life Drain**: Grab any active monster and hold the grab interaction to drain its life force directly into your own health pool.
 - **Natural Transfer Cadence**: Uses the exact rhythm and timing of the player-to-player health transfer mechanic (1-second pulses).
-- **Overheal Protection**: Drain automatically stops when you reach maximum health (100 HP) so you never waste monster health, with optional overheal toggle in configuration.
+- **Consistent Monster Damage & Full Health Siphon**: Monsters always receive the full drain damage per tick regardless of your current HP. If your health is already full, you can continue draining to damage the monster without gaining excess HP (unless Overheal is enabled).
 - **Native Audiovisual Feedback**: Triggers full visual screen pulse and audio heartbeat cues on every healing tick.
 - **Host-Only Multiplayer**: Only the host needs to install the mod. Health changes and damage synchronize across all connected players automatically.
 - **Fully Configurable**: Switch between percentage-based or fixed HP drain, adjust tick rates, and customize health caps.
