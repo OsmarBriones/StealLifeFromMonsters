@@ -1,4 +1,4 @@
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
@@ -8,7 +8,7 @@ namespace StealLifeFromMonsters
 	[BepInPlugin(PluginGuid, PluginName, PluginVersion)]
 	public class StealLifeFromMonstersPlugin : BaseUnityPlugin
 	{
-		// Se reemplaza com.osmar por el parámetro AuthorId del template.json
+		// Se reemplaza com.osmar por el parÃ¡metro AuthorId del template.json
 		// y StealLifeFromMonsters por el nombre del proyecto (sourceName).
 		public const string PluginGuid = "com.osmar.StealLifeFromMonsters";
 		public const string PluginName = "StealLifeFromMonsters";
