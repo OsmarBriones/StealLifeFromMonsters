@@ -1,131 +1,94 @@
-# Feature Specification: [FEATURE NAME]
+# Feature Specification: Monster Life Drain
 
-**Feature Branch**: `[###-feature-name]`
+**Feature Branch**: `001-monster-life-drain`
 
-**Created**: [DATE]
+**Created**: 2026-09-27
 
 **Status**: Draft
 
-**Input**: User description: "$ARGUMENTS"
+**Input**: User description: "Grab monsters and drain their health to heal yourself, using the player health transfer cadence. Fully configurable. Only Host, clients don't need it."
 
 ## User Scenarios & Testing *(mandatory)*
 
-<!--
-  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
+### User Story 1 - Grab Monster to Drain Life (Priority: P1)
 
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
-  - Developed independently
-  - Tested independently
-  - Deployed independently
-  - Demonstrated to users independently
--->
+As an injured player, I want to grab a monster and hold the grab interaction to drain a portion of its life and heal myself, so that I can sustain my health during dangerous encounters.
 
-### User Story 1 - [Brief Title] (Priority: P1)
+**Why this priority**: This is the core mechanic of the mod. Without it, the mod provides no gameplay functionality.
 
-[Describe this user journey in plain language]
-
-**Why this priority**: [Explain the value and why it has this priority level]
-
-**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
+**Independent Test**: Can be tested by injuring a player, approaching an active monster, holding the grab button on the monster, and verifying player HP increases while monster HP decreases at the native player-to-player health transfer cadence.
 
 **Acceptance Scenarios**:
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-2. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. **Given** an injured player (< 100 HP) and an alive monster, **When** the player grabs the monster and maintains the grab hold, **Then** player health increases and monster health decreases by 10% of the monster's health per tick, using the native transfer cadence.
+2. **Given** a player draining a monster, **When** the player releases the grab or moves out of range, **Then** the health transfer immediately stops.
+3. **Given** a player draining a monster, **When** the monster's health reaches 0, **Then** the monster dies and the transfer stops.
 
 ---
 
-### User Story 2 - [Brief Title] (Priority: P2)
+### User Story 2 - Health Capping and Overheal Prevention (Priority: P2)
 
-[Describe this user journey in plain language]
+As a player at full health, I want the life drain to stop transferring when I reach maximum health (100 HP), so that monster life is not consumed unnecessarily without benefit.
 
-**Why this priority**: [Explain the value and why it has this priority level]
+**Why this priority**: Prevents waste of monster health, infinite drain exploits, and respects the vanilla maximum health boundary.
 
-**Independent Test**: [Describe how this can be tested independently]
+**Independent Test**: Grab a monster when player HP is 100 or when player reaches 100 during drain, and verify no further health is drained.
 
 **Acceptance Scenarios**:
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. **Given** a player at 100 HP, **When** the player grabs a monster, **Then** no health drain or transfer occurs.
+2. **Given** a player at 95 HP draining 10 HP, **When** the transfer tick occurs, **Then** the player health is clamped at 100 HP.
 
 ---
 
-### User Story 3 - [Brief Title] (Priority: P3)
+### User Story 3 - Configurable Drain Mode and Values (Priority: P3)
 
-[Describe this user journey in plain language]
+As a server host, I want to configure whether life drain calculates via percentage or fixed amount, and customize the drain values, so that I can balance the mod for my playgroup.
 
-**Why this priority**: [Explain the value and why it has this priority level]
+**Why this priority**: Enables balance tuning for different difficulty levels and player preferences.
 
-**Independent Test**: [Describe how this can be tested independently]
+**Independent Test**: Change `DrainMode` to `Fixed` with `DrainFixedAmount = 15` in `com.osmar.StealLifeFromMonsters.cfg`, reload the game, and verify player receives exactly 15 HP per tick.
 
 **Acceptance Scenarios**:
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. **Given** `DrainMode = Percentage` and `DrainPercentage = 10.0`, **When** draining a 200 HP monster, **Then** 20 HP is drained per tick.
+2. **Given** `DrainMode = Fixed` and `DrainFixedAmount = 5.0`, **When** draining any monster, **Then** 5 HP is drained per tick.
 
 ---
 
-[Add more user stories as needed, each with an assigned priority]
+### User Story 4 - Native Audiovisual Feedback (Priority: P4)
 
-### Edge Cases
+As a player, I want to see the health transfer beam and hear the transfer heartbeat/pulse audio while draining a monster, so that the action feels satisfying and integrated with the game's aesthetic.
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
+**Why this priority**: Critical for game feel and player clarity during chaotic monster encounters.
 
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
+**Independent Test**: Initiate monster life drain and verify the native green/red health transfer beam renders and the transfer audio loops during the hold.
 
-## Requirements *(mandatory)*
+**Acceptance Scenarios**:
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
--->
+1. **Given** active life drain on a monster, **When** the transfer is occurring, **Then** the native health transfer visual effect renders between player and monster.
+2. **Given** active life drain, **When** transfer ticks fire, **Then** native heartbeat/health transfer audio pulses play.
 
-### Functional Requirements
+---
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+## Functional Requirements
 
-*Example of marking unclear requirements:*
+- **FR-001**: The mod MUST operate host-side (`Only Host, clients don't need it.`), detecting grabs and synchronizing health changes across all connected players via vanilla RPCs.
+- **FR-002**: The drain interaction MUST trigger when holding the grab button on an alive monster.
+- **FR-003**: The drain tick rate MUST match the native player-to-player health transfer interval.
+- **FR-004**: Life drain MUST NOT heal the player beyond 100 HP (no overheal).
+- **FR-005**: If the player is downed, dead, or loses grip, the transfer MUST terminate immediately.
+- **FR-006**: BepInEx configuration MUST expose `Enabled`, `DrainMode` (Percentage/Fixed), `DrainPercentage`, `DrainFixedAmount`, and `EnableVisualFeedback`.
 
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+## Key Entities
 
-### Key Entities *(include if feature involves data)*
+- **`MonsterLifeDrainController`**: Manages active drain sessions per player, calculates ticks, and applies damage/healing.
+- **`ConfigurationController`**: Binds and exposes mod configuration settings.
+- **`SemiFunc / PlayerAvatar / Enemy`**: Game engine classes for health state, grab detection, and RPC synchronization.
 
-- **[Entity 1]**: [What it represents, key attributes without implementation]
-- **[Entity 2]**: [What it represents, relationships to other entities]
+## Success Criteria
 
-## Success Criteria *(mandatory)*
-
-<!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
--->
-
-### Measurable Outcomes
-
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
-
-## Assumptions
-
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right assumptions based on reasonable defaults
-  chosen when the feature description did not specify certain details.
--->
-
-- [Assumption about target users, e.g., "Users have stable internet connectivity"]
-- [Assumption about scope boundaries, e.g., "Mobile support is out of scope for v1"]
-- [Assumption about data/environment, e.g., "Existing authentication system will be reused"]
-- [Dependency on existing system/service, e.g., "Requires access to the existing user profile API"]
+1. Player can replenish missing health from any alive monster by holding the grab interaction.
+2. Draining stops reliably upon reaching 100 HP, releasing grab, or monster death.
+3. Native health transfer beam and audio loop accurately during the drain.
+4. Host installation functions completely without clients needing the mod installed.
