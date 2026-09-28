@@ -8,6 +8,7 @@ namespace StealLifeFromMonsters.Drain
 	{
 		private static readonly Dictionary<long, float> drainTimers = new Dictionary<long, float>();
 		private static float cleanupTimer;
+		private static int accumulatedRawDollars;
 
 		internal static void ProcessDrain(EnemyRigidbody enemyRb)
 		{
@@ -94,7 +95,7 @@ namespace StealLifeFromMonsters.Drain
 			int drainAmount;
 			if (ConfigurationController.DrainMode.Value == DrainMode.Percentage)
 			{
-				float pct = Mathf.Clamp(ConfigurationController.DrainPercentage.Value, 1f, 100f) / 100f;
+				float pct = Mathf.Clamp(ConfigurationController.DrainPercentage.Value, 1, 100) / 100f;
 				drainAmount = Mathf.Max(1, Mathf.RoundToInt(enemy.Health.health * pct));
 			}
 			else
@@ -147,40 +148,57 @@ namespace StealLifeFromMonsters.Drain
 				if (drainToConvert > 0)
 				{
 					int multiplier = Mathf.Clamp(ConfigurationController.FullHealthMoneyMultiplier.Value, 0, 300);
-					long potentialMoney = (long)drainToConvert * multiplier;
+					long rawDollarsGained = (long)drainToConvert * multiplier;
 
-					if (potentialMoney > 0)
+					if (rawDollarsGained > 0)
 					{
-						int currentCurrency = SemiFunc.StatGetRunCurrency();
-						int currentTotalHaul = SemiFunc.StatGetRunTotalHaul();
-						int maxCap = ConfigurationController.MaxCurrencyCap.Value;
+						accumulatedRawDollars += (int)Math.Min(rawDollarsGained, (long)int.MaxValue - accumulatedRawDollars);
+						int currencyUnitsToAdd = accumulatedRawDollars / 1000;
 
-						long maxAllowed = Math.Min((long)maxCap, (long)int.MaxValue);
-						long safeRoom = Math.Max(0L, maxAllowed - currentCurrency);
-						int moneyToAdd = (int)Math.Min(potentialMoney, safeRoom);
-
-						if (moneyToAdd > 0)
+						if (currencyUnitsToAdd > 0)
 						{
-							int newCurrency = currentCurrency + moneyToAdd;
-							SemiFunc.StatSetRunCurrency(newCurrency);
+							accumulatedRawDollars %= 1000;
 
-							long roomTotalHaul = Math.Max(0L, (long)int.MaxValue - currentTotalHaul);
-							int totalHaulToAdd = (int)Math.Min((long)moneyToAdd, roomTotalHaul);
-							SemiFunc.StatSetRunTotalHaul(currentTotalHaul + totalHaulToAdd);
+							int currentCurrency = SemiFunc.StatGetRunCurrency();
+							int currentTotalHaul = SemiFunc.StatGetRunTotalHaul();
+							int maxCap = ConfigurationController.MaxCurrencyCap.Value;
 
-							if (CurrencyUI.instance != null)
+							long maxAllowed = Math.Min((long)maxCap, (long)int.MaxValue);
+							long safeRoom = Math.Max(0L, maxAllowed - currentCurrency);
+							int moneyToAdd = (int)Math.Min((long)currencyUnitsToAdd, safeRoom);
+
+							if (moneyToAdd > 0)
 							{
-								CurrencyUI.instance.FetchCurrency();
-							}
+								int newCurrency = currentCurrency + moneyToAdd;
+								SemiFunc.StatSetRunCurrency(newCurrency);
 
-							if (ShopIncreaseUI.instance != null)
-							{
-								ShopIncreaseUI.instance.ShowIncrease(moneyToAdd, 3f);
-							}
+								long roomTotalHaul = Math.Max(0L, (long)int.MaxValue - currentTotalHaul);
+								int totalHaulToAdd = (int)Math.Min((long)moneyToAdd, roomTotalHaul);
+								SemiFunc.StatSetRunTotalHaul(currentTotalHaul + totalHaulToAdd);
 
-							StealLifeFromMonstersPlugin.Logger.LogDebug(
-								$"Converted {drainToConvert} drain into {moneyToAdd} currency for {player.playerName} (Current: {newCurrency}, Mult: {multiplier}x)."
-							);
+								if (CurrencyUI.instance != null)
+								{
+									CurrencyUI.instance.FetchCurrency();
+
+									bool isCurrentlyShown = CurrencyUI.instance.showTimer > 0f ||
+										(CurrencyUI.instance.uiText != null && CurrencyUI.instance.uiText.enabled);
+
+									if (!isCurrentlyShown)
+									{
+										CurrencyUI.instance.Show();
+										CurrencyUI.instance.showTimer = 3f;
+									}
+								}
+
+								if (ShopIncreaseUI.instance != null)
+								{
+									ShopIncreaseUI.instance.ShowIncrease(moneyToAdd, 3f);
+								}
+
+								StealLifeFromMonstersPlugin.Logger.LogDebug(
+									$"Converted {drainToConvert} drain into {moneyToAdd}K currency (${moneyToAdd * 1000}) for {player.playerName} (Current: {newCurrency}K, Mult: {multiplier}x, Remainder: ${accumulatedRawDollars})."
+								);
+							}
 						}
 					}
 				}
@@ -203,6 +221,7 @@ namespace StealLifeFromMonsters.Drain
 		{
 			drainTimers.Clear();
 			cleanupTimer = 0f;
+			accumulatedRawDollars = 0;
 		}
 	}
 }

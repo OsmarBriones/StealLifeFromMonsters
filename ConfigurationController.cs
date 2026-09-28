@@ -9,7 +9,7 @@ namespace StealLifeFromMonsters
 
 		internal static ConfigEntry<bool> Enabled { get; private set; } = null!;
 		internal static ConfigEntry<DrainMode> DrainMode { get; private set; } = null!;
-		internal static ConfigEntry<float> DrainPercentage { get; private set; } = null!;
+		internal static ConfigEntry<int> DrainPercentage { get; private set; } = null!;
 		internal static ConfigEntry<int> DrainFixedAmount { get; private set; } = null!;
 		internal static ConfigEntry<float> TickIntervalSeconds { get; private set; } = null!;
 		internal static ConfigEntry<bool> AllowOverheal { get; private set; } = null!;
@@ -41,10 +41,10 @@ namespace StealLifeFromMonsters
 			DrainPercentage = configFile.Bind(
 				"Mechanics",
 				nameof(DrainPercentage),
-				10f,
+				10,
 				new ConfigDescription(
 					"Percentage of monster's max health to drain per tick (when DrainMode is Percentage).",
-					new AcceptableValueRange<float>(1f, 100f)
+					new AcceptableValueRange<int>(1, 100)
 				)
 			);
 
@@ -64,7 +64,7 @@ namespace StealLifeFromMonsters
 				1.0f,
 				new ConfigDescription(
 					"Seconds between each health drain tick (matches native player transfer interval by default).",
-					new AcceptableValueRange<float>(0.2f, 10.0f)
+					new AcceptableValueRange<float>(0.2f, 3.0f)
 				)
 			);
 
