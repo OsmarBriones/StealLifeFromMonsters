@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+- Changed default value of `AllowDrainWhileStunned` to `true` so health drain continues during stuns and tumbles by default.
+- Changed default value of `EnableFullHealthMoneyConversion` to `true` to enable full health currency conversion by default.
+
 ## [1.2.0] - 2026-09-27
 - Converted `DrainPercentage` configuration entry to an integer type (`int`, default `10`, range 1 - 100).
 - Lowered `TickIntervalSeconds` maximum allowed value from 10.0s to 3.0s (`AcceptableValueRange<float>(0.2f, 3.0f)`).

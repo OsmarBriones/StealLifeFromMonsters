@@ -88,7 +88,7 @@ namespace StealLifeFromMonsters
 			AllowDrainWhileStunned = configFile.Bind(
 				"Mechanics",
 				nameof(AllowDrainWhileStunned),
-				false,
+				true,
 				"If true, allows health drain to continue even if the player is stunned or tumbling, as long as they are still holding the monster."
 			);
 
@@ -102,7 +102,7 @@ namespace StealLifeFromMonsters
 			EnableFullHealthMoneyConversion = configFile.Bind(
 				"Economy",
 				nameof(EnableFullHealthMoneyConversion),
-				false,
+				true,
 				"If true, damage dealt to monsters while the player is at 100% health is converted into run currency immediately."
 			);
 

@@ -34,9 +34,9 @@ All settings are controlled through the generated file: `com.osmar.StealLifeFrom
 | `TickIntervalSeconds` | `1.0` | Seconds between each drain tick (0.2 - 3.0 seconds). |
 | `AllowOverheal` | `false` | When true, allows draining past normal max health up to `MaxHealthCap`. |
 | `MaxHealthCap` | `100` | Maximum health allowed when draining (0 - 1000). |
-| `AllowDrainWhileStunned` | `false` | When true, allows health drain to continue while stunned or tumbling if grabbing the monster. |
+| `AllowDrainWhileStunned` | `true` | When true, allows health drain to continue while stunned or tumbling if grabbing the monster. |
 | `EnableAudioVisualFeedback` | `true` | Plays native heal sound and screen pulse effects while draining. |
-| `EnableFullHealthMoneyConversion` | `false` | When true, damage dealt to monsters while at 100% health is converted into run currency immediately. |
+| `EnableFullHealthMoneyConversion` | `true` | When true, damage dealt to monsters while at 100% health is converted into run currency immediately. |
 | `FullHealthMoneyMultiplier` | `10` | Multiplier applied to drained monster health to calculate currency gained (0 - 300). |
 | `MaxCurrencyCap` | `999999` | Maximum total run currency limit to prevent integer overflow or economy breaking. |
 
