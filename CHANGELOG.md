@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.2.1] - 2026-09-27
 - Changed default value of `AllowDrainWhileStunned` to `true` so health drain continues during stuns and tumbles by default.
 - Changed default value of `EnableFullHealthMoneyConversion` to `true` to enable full health currency conversion by default.
 
