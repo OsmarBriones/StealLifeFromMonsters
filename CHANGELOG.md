@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.2.0] - 2026-09-27
 - Converted `DrainPercentage` configuration entry to an integer type (`int`, default `10`, range 1 - 100).
 - Lowered `TickIntervalSeconds` maximum allowed value from 10.0s to 3.0s (`AcceptableValueRange<float>(0.2f, 3.0f)`).
 - Fixed full health money conversion scale: converted raw dollar earnings (`drained HP * multiplier`) into the game's native $K currency units (`$1K = 1 unit`) via dollar accumulation, ensuring a 500 HP enemy with a 10x multiplier yields $5K ($5,000) instead of an erroneous 5,000K ($5,000,000).
