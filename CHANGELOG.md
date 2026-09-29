@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+- Changed default value of `AllowDrainWhileStunned` to `false` (health drain pauses while player is stunned or tumbling by default).
+- Changed default value of `TickIntervalSeconds` from 1.0s to 1.5s for improved gameplay balance.
+
 ## [1.2.1] - 2026-09-27
 - Changed default value of `AllowDrainWhileStunned` to `true` so health drain continues during stuns and tumbles by default.
 - Changed default value of `EnableFullHealthMoneyConversion` to `true` to enable full health currency conversion by default.

@@ -7,7 +7,7 @@ Only the host needs to have this mod installed — other players see the effects
 ## Features
 
 - **Monster Life Drain**: Grab any active monster and hold the grab interaction to drain its life force directly into your own health pool.
-- **Natural Transfer Cadence**: Uses the exact rhythm and timing of the player-to-player health transfer mechanic (1-second pulses).
+- **Natural Transfer Cadence**: Rhythmic health transfer pulses directly into your health pool (1.5 seconds by default).
 - **Consistent Monster Damage & Full Health Siphon**: Monsters always receive the full drain damage per tick regardless of your current HP. If your health is already full, you can continue draining to damage the monster without gaining excess HP (unless Overheal is enabled).
 - **Native Audiovisual Feedback**: Triggers full visual screen pulse and audio heartbeat cues on every healing tick.
 - **Optional Full Health Money Conversion**: When you are at 100% health, convert excess stolen monster health into immediate run currency.
@@ -31,10 +31,10 @@ All settings are controlled through the generated file: `com.osmar.StealLifeFrom
 | `DrainMode` | `Percentage` | Calculation mode: `Percentage` (scales with monster health) or `Fixed` (flat HP). |
 | `DrainPercentage` | `10` | Percentage of monster's max health to drain per tick (1 - 100%). |
 | `DrainFixedAmount` | `25` | Flat HP drained per tick when using `Fixed` mode (0 - 500). |
-| `TickIntervalSeconds` | `1.0` | Seconds between each drain tick (0.2 - 3.0 seconds). |
+| `TickIntervalSeconds` | `1.5` | Seconds between each drain tick (0.2 - 3.0 seconds). |
 | `AllowOverheal` | `false` | When true, allows draining past normal max health up to `MaxHealthCap`. |
 | `MaxHealthCap` | `100` | Maximum health allowed when draining (0 - 1000). |
-| `AllowDrainWhileStunned` | `true` | When true, allows health drain to continue while stunned or tumbling if grabbing the monster. |
+| `AllowDrainWhileStunned` | `false` | When true, allows health drain to continue while stunned or tumbling if grabbing the monster. |
 | `EnableAudioVisualFeedback` | `true` | Plays native heal sound and screen pulse effects while draining. |
 | `EnableFullHealthMoneyConversion` | `true` | When true, damage dealt to monsters while at 100% health is converted into run currency immediately. |
 | `FullHealthMoneyMultiplier` | `10` | Multiplier applied to drained monster health to calculate currency gained (0 - 300). |

@@ -61,9 +61,9 @@ namespace StealLifeFromMonsters
 			TickIntervalSeconds = configFile.Bind(
 				"Mechanics",
 				nameof(TickIntervalSeconds),
-				1.0f,
+				1.5f,
 				new ConfigDescription(
-					"Seconds between each health drain tick (matches native player transfer interval by default).",
+					"Seconds between each health drain tick.",
 					new AcceptableValueRange<float>(0.2f, 3.0f)
 				)
 			);
@@ -88,7 +88,7 @@ namespace StealLifeFromMonsters
 			AllowDrainWhileStunned = configFile.Bind(
 				"Mechanics",
 				nameof(AllowDrainWhileStunned),
-				true,
+				false,
 				"If true, allows health drain to continue even if the player is stunned or tumbling, as long as they are still holding the monster."
 			);
 

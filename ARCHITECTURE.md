@@ -8,7 +8,7 @@ This document describes the runtime structure, data flow, and design decisions f
 
 1. **Trigger / Hook:** Triggers whenever a player grabs an active monster (`EnemyRigidbody.physGrabObject.playerGrabbing`).
 2. **Authority / Networking:** Strictly Host-authoritative (`SemiFunc.IsMasterClientOrSingleplayer()`). Damage to enemies is propagated via vanilla `EnemyHealth.Hurt()` / `HurtRPC`, and healing to players is propagated via `PlayerHealth.HealOther()` / `UpdateHealthRPC`. Clients do not need the mod installed.
-3. **Outcome:** Transfers health from the grabbed monster to the player at a configurable cadence (default: 1.0s ticks, 10% monster health per tick) with native visual and audio feedback, strictly capped at player max health (100 HP) unless overheal is explicitly enabled.
+3. **Outcome:** Transfers health from the grabbed monster to the player at a configurable cadence (default: 1.5s ticks, 10% monster health per tick) with native visual and audio feedback, strictly capped at player max health (100 HP) unless overheal is explicitly enabled.
 
 ---
 
