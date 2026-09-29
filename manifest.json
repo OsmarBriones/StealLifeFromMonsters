@@ -1,6 +1,6 @@
 {
     "name":  "StealLifeFromMonsters",
-    "version_number":  "1.2.1",
+    "version_number":  "1.2.2",
     "website_url":  "https://github.com/OsmarBriones/StealLifeFromMonsters",
     "description":  "Grab monsters and drain their health to heal yourself, using the player health transfer cadence. Fully configurable. Only Host, clients don\u0027t need it.",
     "dependencies":  [

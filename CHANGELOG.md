@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.2.2] - 2026-09-28
 - Changed default value of `AllowDrainWhileStunned` to `false` (health drain pauses while player is stunned or tumbling by default).
 - Changed default value of `TickIntervalSeconds` from 1.0s to 1.5s for improved gameplay balance.
 
